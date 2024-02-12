@@ -3,7 +3,7 @@
 import React from "react";
 import Weather from "./Weather";
 import "./App.css";
-import backgroundImage from "background.png";
+import backgroundImage from "./background.png";
 
 function App() {
   return (
