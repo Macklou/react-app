@@ -66,5 +66,25 @@ const Weather = () => {
     </div>
   );
 };
+{
+  forecast && (
+    <div className="forecast-container">
+      <h2>5-day Forecast</h2>
+      {forecast.list
+        .filter((_, index) => index % 8 === 0)
+        .map((item, index) => (
+          <div key={index} className="forecast-item">
+            <h3>{new Date(item.dt_txt).toLocaleDateString()}</h3>
+            <img
+              src={`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`}
+              alt="Weather icon"
+            />
+            <p>{item.weather[0].description}</p>
+            <p>Temp: {item.main.temp}°C</p>
+          </div>
+        ))}
+    </div>
+  );
+}
 
 export default Weather;
