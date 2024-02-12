@@ -8,24 +8,23 @@ const Weather = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchCurrentWeather = async () => {};
-
-  const fetchForecast = async (city) => {
+  const fetchCurrentWeather = async (city) => {
     setIsLoading(true);
     setError("");
 
     const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     try {
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Forecast data for the city not found.");
+        throw new Error("Current weather data for the city not found.");
       }
       const data = await response.json();
-      setForecast(data);
+      setWeather(data);
     } catch (error) {
       setError(error.message);
+      setWeather(null);
     } finally {
       setIsLoading(false);
     }
