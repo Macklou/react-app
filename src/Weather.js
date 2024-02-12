@@ -9,9 +9,6 @@ const Weather = () => {
   const [error, setError] = useState("");
 
   const fetchCurrentWeather = async (city) => {
-    setIsLoading(true);
-    setError("");
-
     const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
@@ -22,18 +19,38 @@ const Weather = () => {
       }
       const data = await response.json();
       setWeather(data);
-    } catch (error) {
-      setError(error.message);
+    } catch (fetchError) {
+      setError(fetchError.message);
       setWeather(null);
-    } finally {
-      setIsLoading(false);
+    }
+  };
+
+  const fetchForecast = async (city) => {
+    const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Forecast data for the city not found.");
+      }
+      const data = await response.json();
+      setForecast(data);
+    } catch (forecastError) {
+      setError(forecastError.message);
+      setForecast(null);
     }
   };
 
   const fetchData = async (e) => {
     e.preventDefault();
+    setError(""); // Clear any existing errors
+    setIsLoading(true);
+
     await fetchCurrentWeather(city);
     await fetchForecast(city);
+
+    setIsLoading(false);
   };
 
   return (
@@ -52,11 +69,17 @@ const Weather = () => {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
 
-      {}
       {weather && (
         <div>
           <h1>Weather in {weather.name}</h1>
-          {}
+          <img
+            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+            alt={weather.weather[0].description}
+          />
+          <p>{weather.weather[0].description}</p>
+          <p>Temperature: {weather.main.temp}°C</p>
+          <p>Humidity: {weather.main.humidity}%</p>
+          <p>Wind Speed: {weather.wind.speed} m/s</p>
         </div>
       )}
 
@@ -70,7 +93,7 @@ const Weather = () => {
                 <h3>{new Date(item.dt * 1000).toLocaleDateString()}</h3>
                 <img
                   src={`https://openweathermap.org/img/wn/${item.weather[0].icon}.png`}
-                  alt="Weather icon"
+                  alt={item.weather[0].description}
                 />
                 <p>{item.weather[0].description}</p>
                 <p>Temp: {Math.round(item.main.temp)}°C</p>
