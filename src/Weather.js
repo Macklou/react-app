@@ -8,20 +8,29 @@ const Weather = () => {
   const fetchWeather = async (e) => {
     e.preventDefault();
     const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+    const fetchData = async () => {
+      await fetchWeather(city);
+      await fetchForecast(city);
+    };
     try {
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Forecast data for the city not found.");
+      }
       const data = await response.json();
-      setWeather(data);
+      setForecast(data);
     } catch (error) {
-      console.error("Error fetching weather data:", error);
+      setError(error.message);
+      setForecast(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
-      <form onSubmit={fetchWeather}>
+      <form onSubmit={fetchData}>
         <input
           type="text"
           value={city}
