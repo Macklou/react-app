@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Weather.css";
 
 const Weather = () => {
   const [city, setCity] = useState("");
@@ -45,7 +46,7 @@ const Weather = () => {
           <p>Humidity: {weather.main.humidity}%</p>
           <p>Wind Speed: {weather.wind.speed} m/s</p>
           <a
-            href="https://github.com/yourGitHubUsername"
+            href="https://github.com/MackLou"
             target="_blank"
             rel="noopener noreferrer"
           >
