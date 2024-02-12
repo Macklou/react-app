@@ -34,9 +34,23 @@ const Weather = () => {
       {weather && (
         <div>
           <h1>Weather in {weather.name}</h1>
+          <div>
+            <img
+              src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+              alt="Weather icon"
+            />
+            <p>{weather.weather[0].description}</p>
+          </div>
           <p>Temperature: {weather.main.temp}°C</p>
           <p>Humidity: {weather.main.humidity}%</p>
           <p>Wind Speed: {weather.wind.speed} m/s</p>
+          <a
+            href="https://github.com/yourGitHubUsername"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit my GitHub
+          </a>
         </div>
       )}
     </div>
